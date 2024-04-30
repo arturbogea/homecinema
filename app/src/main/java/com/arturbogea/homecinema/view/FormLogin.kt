@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.arturbogea.homecinema.R
 import com.arturbogea.homecinema.databinding.ActivityFormLoginBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 
 class FormLogin : AppCompatActivity() {
 
@@ -43,6 +45,7 @@ class FormLogin : AppCompatActivity() {
                 senha.isEmpty() ->{
                     Toast.makeText(this,"Digite a sua senha", Toast.LENGTH_SHORT).show()
                 }
+                else -> {autenticacao(email, senha)}
             }
 
         }
@@ -52,4 +55,32 @@ class FormLogin : AppCompatActivity() {
         }
 
     }
+
+    private fun autenticacao(email: String, senha: String){
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, senha).addOnCompleteListener { autenticacao ->
+            if (autenticacao.isSuccessful){
+                Toast.makeText(this,"Login efetuado com sucesso!", Toast.LENGTH_SHORT).show()
+                navegarTelaPrincipal()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(this,"Erro ao logar!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun navegarTelaPrincipal(){
+        startActivity(Intent(this, TelaPrincipal::class.java))
+        finish()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val usuarioAtual = FirebaseAuth.getInstance().currentUser
+
+        if (usuarioAtual != null){
+            navegarTelaPrincipal()
+        }
+
+    }
+
 }

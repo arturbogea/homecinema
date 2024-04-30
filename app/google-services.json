@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "874791664390",
+    "project_id": "home-cinema-cfae1",
+    "storage_bucket": "home-cinema-cfae1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874791664390:android:8e12f070bd52ec33003c87",
+        "android_client_info": {
+          "package_name": "com.arturbogea.homecinema"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1zg3F8dyhT4vcuEI6eMSDBQ1aH2UwGN4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

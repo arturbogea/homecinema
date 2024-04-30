@@ -10,6 +10,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.arturbogea.homecinema.R
 import com.arturbogea.homecinema.databinding.ActivityFormCadastroBinding
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +39,8 @@ class FormCadastro : AppCompatActivity() {
 
         window.statusBarColor = Color.parseColor("#FFFFFF")
         binding.editEmailCadastro.requestFocus()
+
+
 
         binding.btVamosLa.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -88,7 +95,7 @@ class FormCadastro : AppCompatActivity() {
         withContext(Dispatchers.Main){
 
             if (email.isNotEmpty() && senha.isNotEmpty()) {
-                showToast("Cadastro realizado com sucesso")
+                cadastro(email, senha)
             } else if (senha.isEmpty()) {
                 showToast("A senha é obrigatória!")
             } else if (email.isEmpty()) {
@@ -98,5 +105,27 @@ class FormCadastro : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun cadastro(email: String, senha: String){
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, senha).addOnCompleteListener { cadastro ->
+            if (cadastro.isSuccessful)
+                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show()
+
+                val email = binding.editEmailCadastro
+                email.setText("")
+                val senha = binding.editSenhaCadastro
+                senha.setText("")
+        }.addOnFailureListener {
+            val erro = it
+
+            when{
+                erro is FirebaseAuthWeakPasswordException -> {Toast.makeText(this, "Digite uma senha com no minimo 6 caracteres", Toast.LENGTH_SHORT).show()}
+                erro is FirebaseAuthUserCollisionException -> {Toast.makeText(this, "Essa conta já está cadastrada", Toast.LENGTH_SHORT).show()}
+                erro is FirebaseNetworkException -> {Toast.makeText(this, "Sem conexão com a internet", Toast.LENGTH_SHORT).show()}
+                else -> {Toast.makeText(this, "Erro ao cadastrar o usuário", Toast.LENGTH_SHORT).show()}
+            }
+
+        }
     }
 }
