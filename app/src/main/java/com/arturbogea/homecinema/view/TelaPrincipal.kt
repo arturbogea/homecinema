@@ -1,7 +1,9 @@
 package com.arturbogea.homecinema.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,11 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arturbogea.homecinema.R
 import com.arturbogea.homecinema.adapter.AdapterCategoria
+import com.arturbogea.homecinema.api.Api
 import com.arturbogea.homecinema.databinding.ActivityTelaPrincipalBinding
 import com.arturbogea.homecinema.model.Categoria
+import com.arturbogea.homecinema.model.Categorias
 import com.arturbogea.homecinema.model.Filme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class TelaPrincipal : AppCompatActivity() {
 
@@ -44,7 +54,7 @@ class TelaPrincipal : AppCompatActivity() {
         recyclerViewFilmes.setHasFixedSize(true)
         adapterCategoria = AdapterCategoria(this, listaCategorias)
         recyclerViewFilmes.adapter = adapterCategoria
-        getCategorias()
+
 
 
 
@@ -55,21 +65,36 @@ class TelaPrincipal : AppCompatActivity() {
             Toast.makeText(this,"Usuário deslogado", Toast.LENGTH_SHORT).show()
         }
 
+        //Configurar Retrofit
+
+        val retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://stackmobile.com.br")
+            .build()
+            .create(Api::class.java)
+
+        retrofit.listaCategorias().enqueue(object : Callback<Categorias>{
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(p0: Call<Categorias>, response: Response<Categorias>) {
+                if (response.code() == 200){
+                    response.body()?.let {
+                        adapterCategoria.listaCategorias.addAll(it.categorias)
+                        adapterCategoria.notifyDataSetChanged()
+                        binding.containerProgressBar.visibility = View.GONE
+                        binding.progressbar.visibility = View.GONE
+                        binding.txtCarregando.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onFailure(p0: Call<Categorias>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
     }
 
-    private fun getCategorias(){
-        val categoria1 = Categoria("Categoria 1")
-        listaCategorias.add(categoria1)
-
-        val categoria2 = Categoria("Categoria 2")
-        listaCategorias.add(categoria2)
-
-        val categoria3 = Categoria("Categoria 3")
-        listaCategorias.add(categoria3)
-
-        val categoria4 = Categoria("Categoria 4")
-        listaCategorias.add(categoria4)
-    }
 
 
 }

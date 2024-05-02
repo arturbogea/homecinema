@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.arturbogea.homecinema.databinding.FilmeItemBinding
 import com.arturbogea.homecinema.model.Filme
+import com.bumptech.glide.Glide
 
 class AdapterFilme(private val context: Context, private val listaFilmes: MutableList<Filme>):
     RecyclerView.Adapter<AdapterFilme.FilmeViewHolder>() {
@@ -22,7 +23,7 @@ class AdapterFilme(private val context: Context, private val listaFilmes: Mutabl
     }
 
     override fun onBindViewHolder(holder: FilmeViewHolder, position: Int) {
-        holder.capa.setImageDrawable(listaFilmes[position].capa)
+        Glide.with(context).load(listaFilmes[position].capa).centerCrop().into(holder.capa)
     }
 
     override fun getItemCount(): Int {
@@ -31,8 +32,5 @@ class AdapterFilme(private val context: Context, private val listaFilmes: Mutabl
 
 }
 
-private fun ImageView.setImageDrawable(capa: Int?) {
-    capa
-}
 
 

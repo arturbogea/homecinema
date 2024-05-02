@@ -10,7 +10,7 @@ import com.arturbogea.homecinema.databinding.CategoriaItemBinding
 import com.arturbogea.homecinema.model.Categoria
 import com.arturbogea.homecinema.model.Filme
 
-class AdapterCategoria(private val context: Context, private val listaCategorias: MutableList<Categoria>):
+class AdapterCategoria(private val context: Context, val listaCategorias: MutableList<Categoria>):
     RecyclerView.Adapter<AdapterCategoria.CategoriaViewHolder>() {
 
 
