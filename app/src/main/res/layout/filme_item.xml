@@ -6,10 +6,11 @@
 
     <ImageView
         android:id="@+id/capaFilme"
-        android:layout_width="130dp"
-        android:layout_height="160dp"
+        android:layout_width="150dp"
+        android:layout_height="180dp"
         android:src="@drawable/ic_launcher_background"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp"
+        android:scaleType="centerCrop"/>
 
 </LinearLayout>
