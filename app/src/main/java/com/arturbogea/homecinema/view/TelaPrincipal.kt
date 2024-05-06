@@ -88,7 +88,7 @@ class TelaPrincipal : AppCompatActivity() {
             }
 
             override fun onFailure(p0: Call<Categorias>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(applicationContext,"Erro ao buscar todos os filmes!",Toast.LENGTH_SHORT).show()
             }
 
         })

@@ -29,6 +29,10 @@ class AdapterFilme(private val context: Context, private val listaFilmes: Mutabl
 
         holder.capa.setOnClickListener {
             val intent = Intent(context,DetalhesFilme::class.java)
+            intent.putExtra("capa",listaFilmes[position].capa)
+            intent.putExtra("nome",listaFilmes[position].nome)
+            intent.putExtra("descricao", listaFilmes[position].descricao)
+            intent.putExtra("elenco", listaFilmes[position].elenco)
             context.startActivity(intent)
         }
     }
